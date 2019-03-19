@@ -8,7 +8,8 @@
 in the increasing order of discount percentage first, then decreasing order of listing prices.
 NOTE: remember to build and test a statement one clause at a time. First build and test
 SELECT and FROM clauses, then add ORDER BY clause
-*/SELECT product_code, product_name, list_price, discount_percent
+*/
+SELECT product_code, product_name, list_price, discount_percent
 FROM products
 ORDER BY discount_percent;
 
@@ -24,7 +25,7 @@ Heading of the query result: Customer Names
 Data format: last name, then a comma and a space, then first name, like below:
  Trump, Donald
 null*/
-
+--------------------------------------------------------------------------------
 SELECT last_name ||', '||first_name
 FROM customers
 WHERE last_name > 'L' AND last_name < 'Y'

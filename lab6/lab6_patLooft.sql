@@ -30,6 +30,7 @@ printed.
 Use headings HOT_CARD_ORDER_COUNT, HOT_CARD_TOTAL_TAX in the query result.
 HINT: need to use HAVING clause.
 */
+-----------------------------------------------------------------------
 SELECT DISTINCT orders.card_type, COUNT(DISTINCT order_items.order_id) as CARD_ORDER_COUNT, SUM(DISTINCT orders.tax_amount) as CARD_TOTAL_TAX
 FROM orders JOIN order_items ON (orders.order_id = order_items.order_id)
 GROUP BY orders.card_type
