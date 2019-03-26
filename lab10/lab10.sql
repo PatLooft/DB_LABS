@@ -47,25 +47,60 @@ should say, “The number of products is less than 7”.*/
 CONNECT mgs/mgs;
 SET SERVEROUTPUT ON;
 DECLARE 
-    counting NUMBER(8, 2);
+    counting Int;
 BEGIN 
-    SELECT COUNT(product_id) INTO counting 
+    SELECT COUNT(product_id) 
+    INTO counting 
     FROM products;
     IF counting >= 7 THEN
         DBMS_OUTPUT.PUT_LINE('COUNT IS GREATER THAN OR EQUAL TO 7');
     ELSE 
-         DBMS_OUTPUT.PUT_LINE('COUNT IS LESS THAN 7');
+        DBMS_OUTPUT.PUT_LINE('COUNT IS LESS THAN 7');
     END IF;
-END;
-
-SELECT counting from 
-/*2. Write a script that uses an anonymous block of PL/SQL code to declare two variables to store (1) the
-count of all of the products in the Products table and (2) the average list price for those products. If
-the product count is greater than or equal to 7, the stored procedure should display a result set that
+END; 
+/
+/*2. Write a script that uses an anonymous block of PL/SQL code to declare two variables to store 
+(1) the count of all of the products in the Products table and 
+(2) the average list price for those products.
+If the product count is greater than or equal to 7, the stored procedure should display a result set that
 displays the values of both variables. Otherwise, the procedure should display a result set that
 displays a message that says, “The number of products is less than 7”.*/
+
+CONNECT mgs/mgs;
+SET SERVEROUTPUT ON;
+DECLARE 
+    counting Int;
+    aver INT;
+BEGIN 
+    SELECT COUNT(product_id) INTO counting FROM products;
+    SELECT AVG(list_price)INTO aver FROM products;
+    IF counting >= 7 THEN
+        DBMS_OUTPUT.PUT('Count: ' || counting);
+        DBMS_OUTPUT.PUT('Average: ' || aver);
+    ELSE 
+        DBMS_OUTPUT.PUT_LINE('COUNT IS LESS THAN 7');
+    END IF;
+END; 
+/
+
+
 /*3. Write a script that uses an anonymous block of PL/SQL code that calculates the
 common factors between 10 and 20. To find a common factor, you can use the modulo
 function (MOD) to check whether a number can be evenly divided into both numbers.
 Then, this procedure should display a string that displays the common factors like this:
-Common factors of 10 and 20: 1 2 5*/
+Common factors of 10 and 20: 1 2 5
+*/
+
+
+SET SERVEROUTPUT ON;
+BEGIN
+DBMS_OUTPUT.PUT_LINE('Common factors of 10 and 20:');
+FOR i IN 1..9 LOOP
+    IF (MOD(10, i) = 0) AND (MOD(20, i) = 0) THEN
+        DBMS_OUTPUT.PUT_LINE(TO_CHAR(i)); 
+    END IF;
+END LOOP;
+EXCEPTION
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('An error occurred');
+END;
