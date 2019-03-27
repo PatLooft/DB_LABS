@@ -35,7 +35,7 @@ SELECT o.order_id, o.order_date, o.tax_amount, o.ship_date,
 FROM order_items oi JOIN orders o ON (o.order_id = oi.order_id)
                     JOIN products p ON (oi.product_id = p.product_id);
                     
-DROP VIEW order_item_products;
+
                     
 SELECT * FROM order_item_products;
 
@@ -44,8 +44,9 @@ count of all products in the Products table. If the count is greater than or equ
 display a message that says, “The number of products is greater than or equal to 7”. Otherwise, it
 should say, “The number of products is less than 7”.*/
 
-CONNECT mgs/mgs;
-SET SERVEROUTPUT ON;
+/*CONNECT mgs/mgs;
+SET SERVEROUTPUT ON*/
+
 DECLARE 
     counting Int;
 BEGIN 
@@ -66,17 +67,15 @@ If the product count is greater than or equal to 7, the stored procedure should 
 displays the values of both variables. Otherwise, the procedure should display a result set that
 displays a message that says, “The number of products is less than 7”.*/
 
-CONNECT mgs/mgs;
-SET SERVEROUTPUT ON;
 DECLARE 
-    counting Int;
+    counting INT;
     aver INT;
 BEGIN 
     SELECT COUNT(product_id) INTO counting FROM products;
     SELECT AVG(list_price)INTO aver FROM products;
     IF counting >= 7 THEN
-        DBMS_OUTPUT.PUT('Count: ' || counting);
-        DBMS_OUTPUT.PUT('Average: ' || aver);
+        DBMS_OUTPUT.PUT_LINE('Count: ' || counting);
+        DBMS_OUTPUT.PUT_LINE('Average: ' || aver);
     ELSE 
         DBMS_OUTPUT.PUT_LINE('COUNT IS LESS THAN 7');
     END IF;
