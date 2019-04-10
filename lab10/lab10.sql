@@ -7,10 +7,17 @@ This view should return these columns from the Addresses table: bill_line1, bill
 bill_state, bill_zip, ship_line1, ship_line2, ship_city, ship_state, and ship_zip.
 The rows in this view should be sorted by the last_name and then first_name columns.*/
 
+/*CREATE OR REPLACE VIEW customer_address AS 
+SELECT c.customer_id, c.email_address, c.last_name, c.first_name,
+    a.line1, a.line2, a.city, a.state, a.zip_code, a.
+FROM customers c JOIN addresses a on (c.customer_id = a.customer_id)
+ORDER BY c.last_name, c.first_name;*/
+
 CREATE OR REPLACE VIEW customer_address AS 
 SELECT c.customer_id, c.email_address, c.last_name, c.first_name,
     a.line1, a.line2, a.city, a.state, a.zip_code
 FROM customers c JOIN addresses a on (c.customer_id = a.customer_id)
+                JOIN orders o on (o.ship_address_id = c.shipping_address_id AND a.billing_address_id = c.billing_address_id)
 ORDER BY c.last_name, c.first_name;
 
 /*2. Write a SELECT statement that returns these columns from the customer_addresses view that you
