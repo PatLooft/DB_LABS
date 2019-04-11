@@ -56,7 +56,7 @@ WHERE (customer_id = 1);
 UPDATE customer_address
 SET line1 = 'Suite 3, 1925 N. 12th Street'
 WHERE (customer_id = 1);
-/
+
 
 /*Both changes were a failure due to the following error:SQL Error: ORA-01779: cannot modify a column which maps to a non key-preserved table
 01779. 00000 -  "cannot modify a column which maps to a non key-preserved table"
@@ -75,25 +75,28 @@ product so it looks something like this:
 Here, each value is enclosed in double quotes ("), each column is separated by a comma (,) and each
 row is separated by a pipe character (|).*/
 
+
+CONNECT mgs/mgs;
+SET SERVEROUTPUT ON;
 DECLARE
-    allProducts VARCHAR2(512) := '';
-    temp VARCHAR2(48) := '';
-    
+    allProducts VARCHAR2(1024) := '';
+    temp VARCHAR2(64) := '';
     CURSOR prods_cursor IS
         SELECT product_name, list_price
         FROM products
         WHERE list_price > 700
         ORDER BY list_price DESC;  
-        
-    product_row prods_cursor%ROWTYPE;
+    product_row products%ROWTYPE;
 BEGIN
     FOR product_row IN prods_cursor LOOP
-        temp := '\"' || TO_CHAR(prods_cursor.product_name) || '\"' || ',\"' || TO_CHAR(prods_cursor.list_price) || '\" \| ';
+        temp := '"' || product_row.product_name || '"' || ' , "' || TO_CHAR(product_row.list_price, '$9999.99') || '" | ';
+        DBMS_OUTPUT.PUT(temp);
         allproducts := allproducts || temp;
     END LOOP;
     DBMS_OUTPUT.PUT_LINE(allProducts);
 END;
 /
+
 /*6. Write a script that uses an anonymous block of PL/SQL code that attempts to insert a
 new category named “Guitars” into the Categories table. If the insert is successful, the
 procedure should display this message:
@@ -101,3 +104,27 @@ procedure should display this message:
 If the update is unsuccessful, the procedure should display this message:
 Row was not inserted - duplicate entry
 */
+
+CONNECT mgs/mgs;
+SET SERVEROUTPUT ON;
+DECLARE
+    pre Int;
+    post Int;
+BEGIN
+    pre := sql%Rowcount;
+    INSERT INTO categories  VALUES (12, 'Guitars');
+    post := sql%Rowcount;
+    DBMS_OUTPUT.PUT_LINE( 'pre = ' || pre);
+    DBMS_OUTPUT.PUT_LINE( 'post = ' || post);
+    IF pre != post THEN
+        DBMS_OUTPUT.PUT_LINE('Values successfully inserted');
+    END IF;
+    EXCEPTION
+        WHEN DUP_VAL_ON_INDEX THEN
+            DBMS_OUTPUT.PUT_LINE('ERROR: Attempted to insert data that already exists');
+        WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE('ERROR: unexpected error occured');
+            DBMS_OUTPUT.PUT_LINE(SQLERRM);
+    DBMS_OUTPUT.PUT_LINE('Values successfully inserted');
+END;
+/
